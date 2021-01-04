@@ -1,0 +1,36 @@
+global:
+  sendAnonymousUsage: false
+
+log:
+  level: "DEBUG"
+  format: common
+
+accesslog:
+ filePath: access.log
+ bufferingSize: 100
+
+api:
+  dashboard: true
+  debug: true
+  insecure: true
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    watch: true
+    exposedByDefault: false
+
+  file:
+    filename: /etc/traefik/config.yml
+    watch: true
+
+entryPoints:
+  http:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+  https:
+    address: ":443"
