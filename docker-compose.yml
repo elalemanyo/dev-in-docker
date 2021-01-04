@@ -1,0 +1,57 @@
+version: '3.5'
+
+services:
+  traefik:
+    container_name: "${PREFIX}-traefik"
+    image: traefik:v2.3
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    command: |-
+      --providers.docker.network="${PREFIX}-network"
+    labels:
+      traefik.enable: true
+      traefik.http.routers.traefik.entrypoints: https
+      traefik.http.routers.traefik.rule: "Host(`traefik.${DOCKER_DOMAIN}`)"
+      traefik.http.routers.traefik.service: api@internal
+      traefik.http.routers.traefik.tls: true
+      traefik.http.services.traefik.loadbalancer.server.port: 8080
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/config.yml:/etc/traefik/config.yml:ro
+      - ./certs:/etc/certs:ro
+
+  portainer:
+    container_name: "${PREFIX}-portainer"
+    image: portainer/portainer
+    restart: unless-stopped
+    command: |-
+      --no-auth -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      traefik.enable: true
+      traefik.http.routers.portainer.entrypoints: https
+      traefik.http.routers.portainer.rule: "Host(`portainer.${DOCKER_DOMAIN}`)"
+      traefik.http.routers.portainer.tls: true
+      traefik.http.services.portainer.loadbalancer.server.port: 9000
+
+  mailhog:
+    image: druidfi/mailhog:1.0.1
+    container_name: "${PREFIX}-mailhog"
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.http.routers.mailhog.entrypoints: https
+      traefik.http.routers.mailhog.rule: "Host(`mailhog.${DOCKER_DOMAIN}`)"
+      traefik.http.routers.mailhog.tls: true
+      traefik.http.services.mailhog.loadbalancer.server.port: 8025
+
+networks:
+  default:
+    name: "${PREFIX}-network"
+    external: false
