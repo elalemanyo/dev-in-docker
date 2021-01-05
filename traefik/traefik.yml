@@ -2,12 +2,12 @@ global:
   sendAnonymousUsage: false
 
 log:
-  level: "DEBUG"
+  level: "INFO"
   format: common
 
-accesslog:
- filePath: access.log
- bufferingSize: 100
+# accesslog:
+#  filePath: access.log
+#  bufferingSize: 100
 
 api:
   dashboard: true
