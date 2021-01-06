@@ -1,0 +1,17 @@
+tls:
+  certificates:
+    - certFile: "/etc/certs/d.test-cert.pem"
+      keyFile: "/etc/certs/d.test-key.pem"
+
+# http:
+#   routers:
+#     non_docker_service:
+#       rule: "Host(`non_docker_service.d.test`)"
+#       service: "non_docker_service"
+#       tls: {}
+
+#   services:
+#     non_docker_service:
+#       loadBalancer:
+#         servers:
+#           - url: http://host.docker.internal:3000
