@@ -35,10 +35,20 @@ mkcert -cert-file certs/d.test-cert.pem -key-file certs/d.test-key.pem "d.test" 
 
 ### Create .env file
 Copy the default `.env` file als startpoint:
+
 ```bash
 cp .env_default .env
 ```
-Change something if you want to.
+And change something if you need to.
+
+### Create træfik config files
+Copy the default ones als startpoint:
+
+```bash
+cp traefik/config_default.yml traefik/config.yml
+cp traefik/traefik_default.yml traefik/traefik.yml
+```
+And change something if you need to.
 
 ### Hosts File - Wildcard DNS domain on Mac OS X (optional)
 Using [Dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) as a local resolver.
@@ -120,6 +130,26 @@ networks:
     name: "dev-in-docker-network"
     external: true
 ```
+
+## Setting non docker Project
+For all the projects running locally out of docker you can add a route inside `traefik/config.yml`:
+
+```bash
+http:
+  routers:
+    non_docker_service:
+      rule: "Host(`non_docker_service.d.test`)"
+      service: "non_docker_service"
+      tls: {}
+
+  services:
+    non_docker_service:
+      loadBalancer:
+        servers:
+          - url: http://host.docker.internal:3000
+```
+
+Now you can call your local running project like this: `non_docker_service.d.test`
 
 ## References
 * [Stonehenge](https://github.com/druidfi/stonehenge)
