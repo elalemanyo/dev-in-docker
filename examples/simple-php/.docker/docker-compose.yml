@@ -5,7 +5,7 @@ services:
     container_name: ${PROJECT_NAME}-web
     image: php:7.4
     restart: always
-    command: php -S 0.0.0.0:80 /app/public/index.php
+    command: php -S 0.0.0.0:80 -t /app/public/
     volumes:
       - ../:/app
     labels:
