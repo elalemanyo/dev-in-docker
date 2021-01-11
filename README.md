@@ -131,6 +131,8 @@ networks:
     external: true
 ```
 
+[Check some more examples](examples)
+
 ## Setting non docker Project
 For all the projects running locally out of docker you can add a route inside `traefik/config.yml`:
 
