@@ -9,6 +9,7 @@ services:
       args:
         APACHE_VERSION: ${APACHE_VERSION}
         APACHE_DOCUMENT_ROOT: ${APACHE_DOCUMENT_ROOT}
+        UID: ${UID}
     volumes:
       - ../:/var/www/html
     restart: always
