@@ -3,9 +3,9 @@ version: '3.5'
 services:
   app:
     container_name: ${PROJECT_NAME}-web
-    image: php:7.4
+    image: php:${PHP_VERSION}
     restart: always
-    command: php -S 0.0.0.0:80 -t /app/public/
+    command: php -S 0.0.0.0:80 -t "/app/${DOCUMENT_ROOT}"
     volumes:
       - ../:/app
     labels:
