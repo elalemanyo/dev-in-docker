@@ -1,0 +1,30 @@
+version: '3.5'
+
+services:
+  web:
+    container_name: ${PROJECT_NAME}-web
+    build:
+      context: ./apache
+      dockerfile: Dockerfile
+      args:
+        APACHE_VERSION: ${APACHE_VERSION}
+        APACHE_DOCUMENT_ROOT: ${APACHE_DOCUMENT_ROOT}
+    volumes:
+      - ../:/var/www/html
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${PROJECT_NAME}-web.entrypoints=https"
+      - "traefik.http.routers.${PROJECT_NAME}-web.rule=Host(`${PROJECT_NAME}.d.test`)"
+      - "traefik.http.routers.${PROJECT_NAME}-web.tls=true"
+      - "traefik.http.services.${PROJECT_NAME}-web.loadbalancer.server.port=80"
+    networks:
+      - default
+      - dev-in-docker-network
+
+networks:
+  default:
+    internal: true
+  dev-in-docker-network:
+    name: dev-in-docker-network
+    external: true
