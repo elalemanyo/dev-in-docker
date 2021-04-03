@@ -1,0 +1,28 @@
+version: '3'
+services:
+  web:
+    container_name: ${PROJECT_NAME}-web
+    build: .
+    expose: [3000]
+    command: npm run dev
+    volumes:
+      - ../:/src/app
+    environment:
+      - NODE_ENV=development
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${PROJECT_NAME}-web.entrypoints=https"
+      - "traefik.http.routers.${PROJECT_NAME}-web.rule=Host(`${PROJECT_NAME}.d.test`)"
+      - "traefik.http.routers.${PROJECT_NAME}-web.tls=true"
+      - "traefik.http.services.${PROJECT_NAME}-web.loadbalancer.server.port=3000"
+    networks:
+      - default
+      - dev-in-docker-network
+
+networks:
+  default:
+    internal: true
+  dev-in-docker-network:
+    name: dev-in-docker-network
+    external: true
+
