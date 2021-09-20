@@ -2,6 +2,23 @@ ARG APACHE_VERSION
 
 FROM php:$APACHE_VERSION-apache
 
+# Install development packages and clean up apt cache.
+RUN apt-get update && apt-get install -y \
+    curl \
+    g++ \
+    git \
+    libbz2-dev \
+    libfreetype6-dev \
+    libicu-dev \
+    libjpeg-dev \
+    libmcrypt-dev \
+    libpng-dev \
+    libreadline-dev \
+    sudo \
+    unzip \
+    zip \
+ && rm -rf /var/lib/apt/lists/*
+
 # Update web root to public
 ARG APACHE_DOCUMENT_ROOT
 ENV APACHE_DOCUMENT_ROOT=$APACHE_DOCUMENT_ROOT
