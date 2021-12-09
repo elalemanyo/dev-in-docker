@@ -3,7 +3,7 @@ version: '3.5'
 services:
   traefik:
     container_name: "${PREFIX}-traefik"
-    image: traefik:v2.3
+    image: traefik:v2.5.4
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -27,12 +27,11 @@ services:
 
   portainer:
     container_name: "${PREFIX}-portainer"
-    image: portainer/portainer
+    image: portainer/portainer-ce:latest
     restart: unless-stopped
-    command: |-
-      --no-auth -H unix:///var/run/docker.sock
-      --logo "${LOGO_URL}"
+    command: --logo "${LOGO_URL}"
     volumes:
+      - ./portainer:/data
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       traefik.enable: true
@@ -42,7 +41,7 @@ services:
       traefik.http.services.portainer.loadbalancer.server.port: 9000
 
   mailhog:
-    image: druidfi/mailhog:1.0.1
+    image: druidfi/mailhog:latest
     container_name: "${PREFIX}-mailhog"
     restart: unless-stopped
     labels:
