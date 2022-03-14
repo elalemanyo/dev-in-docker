@@ -59,36 +59,35 @@ Install Dnsmasq with brew
 brew install dnsmasq
 ```
 
-Create the etc dir if needed
+Create config directory
 
 ```bash
-mkdir -p /usr/local/etc
+mkdir -pv $(brew --prefix)/etc/
 ```
 
-Create a simple configuration, where all .test domains would respond with 127.0.0.1
+Setup *.test
 
 ```bash
-echo "address=/.test/127.0.0.1" > /usr/local/etc/dnsmasq.conf
+echo 'address=/.test/127.0.0.1' >> $(brew --prefix)/etc/dnsmasq.conf
 ```
 
-Install the daemon startup file
+Autostart - now and after reboot
 
 ```bash
-sudo cp -fv /usr/local/opt/dnsmasq/*.plist /Library/LaunchDaemons
+sudo brew services start dnsmasq
 ```
 
-Start the daemon
+Add to resolvers.
+Create resolver directory
 
 ```bash
-sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+sudo mkdir -v /etc/resolver
 ```
 
-All we need to do is tell the resolver to use Dnsmasq for .test domains:
+Add your nameserver to resolvers
 
 ```bash
-# man 5 resolver
-sudo mkdir -p /etc/resolver
-sudo sh -c 'echo "nameserver 127.0.0.1" > /etc/resolver/test'
+sudo bash -c 'echo "nameserver 127.0.0.1" > /etc/resolver/test'
 ```
 
 Now you can use any .test domain and it will always resolve to `127.0.0.1`.<br/>
