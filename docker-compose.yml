@@ -1,9 +1,9 @@
-version: '3.5'
+version: "3.9"
 
 services:
   traefik:
     container_name: "${PREFIX}-traefik"
-    image: traefik:v2.5.4
+    image: traefik:v2.8.3
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -21,9 +21,10 @@ services:
       - "80:80"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./traefik/config.yml:/etc/traefik/config.yml:ro
-      - ./certs:/etc/certs:ro
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/config.yml:/etc/traefik/config.yml
+      - ./traefik/log:/log
+      - ./certs:/etc/certs
 
   portainer:
     container_name: "${PREFIX}-portainer"
@@ -41,9 +42,10 @@ services:
       traefik.http.services.portainer.loadbalancer.server.port: 9000
 
   mailhog:
-    image: druidfi/mailhog:latest
+    image: mailhog/mailhog
     container_name: "${PREFIX}-mailhog"
-    restart: unless-stopped
+    ports:
+      - "1025:1025"
     labels:
       traefik.enable: true
       traefik.http.routers.mailhog.entrypoints: https
