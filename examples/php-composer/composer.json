@@ -1,0 +1,13 @@
+{
+  "config": {
+    "github-oauth": {
+      "github.com": "627f772441e9eb19152a4fc50c2ad3950b032ca6"
+    }
+  },
+  "require": {
+    "klein/klein": "^2.1"
+  },
+  "require-dev": {
+    "kint-php/kint": "^3.3"
+  }
+}
