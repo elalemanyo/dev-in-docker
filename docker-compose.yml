@@ -3,7 +3,7 @@ version: "3.9"
 services:
   traefik:
     container_name: "${PREFIX}-traefik"
-    image: traefik:v2.8.3
+    image: traefik:v2.9.4
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -42,7 +42,8 @@ services:
       traefik.http.services.portainer.loadbalancer.server.port: 9000
 
   mailhog:
-    image: mailhog/mailhog
+    image: mailhog:local
+    build: https://github.com/mailhog/MailHog.git
     container_name: "${PREFIX}-mailhog"
     ports:
       - "1025:1025"
